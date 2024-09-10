@@ -9,7 +9,7 @@
 #include "ANIM_action.hh"
 #include "ANIM_animdata.hh"
 
-#include "BKE_action.h"
+#include "BKE_action.hh"
 #include "BKE_anim_data.hh"
 #include "BKE_fcurve.hh"
 #include "BKE_lib_id.hh"
@@ -127,7 +127,9 @@ void animdata_fcurve_delete(bAnimContext *ac, AnimData *adt, FCurve *fcu)
       animdata_remove_empty_action(adt);
     }
     else {
-      /* TODO: support deleting FCurves from layered Actions. */
+      action_fcurve_remove(action, *fcu);
+      /* Return early to avoid the call to BKE_fcurve_free because the fcu has already been freed
+       * by action_fcurve_remove. */
       return;
     }
   }
